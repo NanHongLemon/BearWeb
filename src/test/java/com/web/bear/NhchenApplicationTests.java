@@ -1,4 +1,4 @@
-package com.web.nhchen;
+package com.web.bear;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

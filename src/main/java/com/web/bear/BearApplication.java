@@ -1,13 +1,13 @@
-package com.web.nhchen;
+package com.web.bear;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NhchenApplication {
+public class BearApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NhchenApplication.class, args);
+        SpringApplication.run(BearApplication.class, args);
     }
 
 }
