@@ -13,6 +13,7 @@
             is-vertical-resize
             style="width:100%"
             is-horizontal-resize
+            :is-loading="isLoading"
             :vertical-resize-offset='5'
             :min-height='200'
             :columns="columns"
@@ -35,8 +36,9 @@
            this.formData.append('file', e.target.files[0])
         },
         upload() {
+          loading()
           axios.post('/api/excel/upload?timestamp=' + new Date().getTime(), this.formData)
-            .then((result) => { console.log(result); renderTable(result.data) })
+            .then((result) => { renderTable(result.data) })
             .catch((err) => { console.error(err) })
         }
       }
@@ -49,8 +51,8 @@ var table = new Vue({
       el: '#excelTable',
       data: function() {
             return {
-                isLoading: true,
-                tableData: [],
+                isLoading: false,
+                tableData: null,
                 columns: [
                     {field: 'dateTime', title:'時間戳記', width: 100, titleAlign: 'center',columnAlign:'center', isResize:true},
                     {field: 'name', title: '姓名', width: 100, titleAlign: 'center',columnAlign:'center', isResize:true},
@@ -62,8 +64,13 @@ var table = new Vue({
         }
     })
 
+function loading() {
+  table.isLoading = true;
+}
+
 function renderTable(resultData) {
   table.tableData = resultData;
+  table.isLoading = false;
 }
 
 </script>
