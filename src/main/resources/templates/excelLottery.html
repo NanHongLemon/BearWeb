@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head"></head>
+
+<body>
+<div id="app">
+    <input multiple type="file" @change="fileChange">
+    <button @click="upload">upload</button>
+</div>
+
+<div id="excelTable">
+    <v-table
+            is-vertical-resize
+            style="width:100%"
+            is-horizontal-resize
+            :vertical-resize-offset='5'
+            :min-height='200'
+            :columns="columns"
+            :table-data="tableData"
+            row-hover-color="#eee"
+            row-click-color="#edf7ff"
+    ></v-table>
+</div>
+</body>
+
+<script>
+    let app = new Vue({
+      el: '#app',
+      data: {
+        formData: ''
+      },
+      methods: {
+        fileChange(e) {
+           this.formData = new FormData()
+           this.formData.append('file', e.target.files[0])
+        },
+        upload() {
+          axios.post('/api/excel/upload?timestamp=' + new Date().getTime(), this.formData)
+            .then((result) => { console.log(result); renderTable(result.data) })
+            .catch((err) => { console.error(err) })
+        }
+      }
+    })
+
+</script>
+
+<script>
+var table = new Vue({
+      el: '#excelTable',
+      data: function() {
+            return {
+                isLoading: true,
+                tableData: [],
+                columns: [
+                    {field: 'dateTime', title:'時間戳記', width: 100, titleAlign: 'center',columnAlign:'center', isResize:true},
+                    {field: 'name', title: '姓名', width: 100, titleAlign: 'center',columnAlign:'center', isResize:true},
+                    {field: 'age', title: '年齡', width: 50, titleAlign: 'center',columnAlign:'center', isResize:true},
+                    {field: 'gender', title: '性別', width: 50, titleAlign: 'center',columnAlign:'center', isResize:true},
+                    {field: 'tel', title: '電話', width: 100, titleAlign: 'center',columnAlign:'center', isResize:true}
+                ]
+            }
+        }
+    })
+
+function renderTable(resultData) {
+  table.tableData = resultData;
+}
+
+</script>
+
+</html>
