@@ -1,63 +1,34 @@
 package com.web.bear.model;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserLotteryModel {
 
-    private Date date;
-    private String name;
-    private double age;
-    private String gender;
-    private String tel;
+    private List<UserExcelModel> admissions = new ArrayList<>();
+    private List<UserExcelModel> waitings = new ArrayList<>();
 
-    public Date getDate() {
-        return date;
+    public List<UserExcelModel> getAdmissions() {
+        return admissions;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setAdmissions(List<UserExcelModel> admissions) {
+        this.admissions = admissions;
     }
 
-    public String getName() {
-        return name;
+    public List<UserExcelModel> getWaitings() {
+        return waitings;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getAge() {
-        return age;
-    }
-
-    public void setAge(double age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setWaitings(List<UserExcelModel> waitings) {
+        this.waitings = waitings;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("UserLotteryModel{");
-        sb.append("date=").append(date);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", age=").append(age);
-        sb.append(", gender='").append(gender).append('\'');
-        sb.append(", tel='").append(tel).append('\'');
+        sb.append("admissions=").append(admissions);
+        sb.append(", waitings=").append(waitings);
         sb.append('}');
         return sb.toString();
     }

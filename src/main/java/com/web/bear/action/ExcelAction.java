@@ -1,5 +1,6 @@
 package com.web.bear.action;
 
+import com.web.bear.model.UserExcelModel;
 import com.web.bear.model.UserLotteryModel;
 import com.web.bear.service.ExcelService;
 import com.web.bear.util.JsonUtil;
@@ -25,7 +26,7 @@ public class ExcelAction {
         String result = "";
         try {
             if (excelService.hasExcelFormat(file)) {
-                List<UserLotteryModel> listData = excelService.processExcel(file.getInputStream());
+                List<UserExcelModel> listData = excelService.processExcel(file.getInputStream());
                 result = JsonUtil.objectToJson(listData);
             } else {
 

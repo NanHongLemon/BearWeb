@@ -1,5 +1,6 @@
 package com.web.bear.service;
 
+import com.web.bear.model.UserExcelModel;
 import com.web.bear.model.UserLotteryModel;
 import org.apache.catalina.User;
 import org.apache.poi.ss.usermodel.*;
@@ -26,27 +27,25 @@ public class ExcelService {
         return true;
     }
 
-    public List<UserLotteryModel> processExcel(InputStream inputStream) throws IOException {
+    public List<UserExcelModel> processExcel(InputStream inputStream) throws IOException {
 
+        DataFormatter formatter = new DataFormatter();
         Workbook wb = new XSSFWorkbook(inputStream);
         Sheet sheet = wb.getSheetAt(0);
         Row row = sheet.getRow(0);
-        List<UserLotteryModel> list = new ArrayList<>();
+        List<UserExcelModel> list = new ArrayList<>();
         for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
             row = sheet.getRow(i);
-            UserLotteryModel userLotteryModel = new UserLotteryModel();
+            UserExcelModel userExcelModel = new UserExcelModel();
             if (row != null) {
-                userLotteryModel.setDate(row.getCell(0).getDateCellValue());
-                userLotteryModel.setName(row.getCell(1).getStringCellValue());
-                userLotteryModel.setAge(row.getCell(2).getNumericCellValue());
-                userLotteryModel.setGender(row.getCell(3).getStringCellValue());
-                userLotteryModel.setTel(row.getCell(4).getStringCellValue());
-                list.add(userLotteryModel);
+                userExcelModel.setId(Integer.parseInt(formatter.formatCellValue(row.getCell(0))));
+                userExcelModel.setName(formatter.formatCellValue(row.getCell(1)));
+                list.add(userExcelModel);
             } else {
                 break;
             }
         }
-        System.out.println(list);
+
         return list;
     }
 }
