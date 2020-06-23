@@ -5,7 +5,6 @@
 <style>
 .div-father{_text-align:center; background-color:#f6f9fc; padding-top: 10px;}
 .div-child{width:600px;margin:0 auto; _text-align:left;}
-
 </style>
 <body class="div-father">
     <div class="div-child">
@@ -14,7 +13,10 @@
                 <a class="nav-link active" id="inputLotteryData-tab" data-toggle="tab" href="#inputLotteryData" role="tab" aria-controls="inputLotteryData" aria-selected="true">匯入抽獎資料</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="outputLottery-tab" data-toggle="tab" href="#outputLottery" role="tab" aria-controls="outputLottery" aria-selected="false">抽獎結果</a>
+                <a class="nav-link" id="admissionLottery-tab" data-toggle="tab" href="#admissionLottery" role="tab" aria-controls="admission" aria-selected="false">正取結果</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="waitingLottery-tab" data-toggle="tab" href="#waitingLottery" role="tab" aria-controls="waitingLottery" aria-selected="false">備取結果</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -56,7 +58,7 @@
                     <input type="button" class="btn btn-primary" value="抽獎" @click="sendLottery"/>
                 </div>
             </div>
-            <div class="tab-pane fade" id="outputLottery" role="tabpanel" aria-labelledby="outputLottery-tab">
+            <div class="tab-pane fade" id="admissionLottery" role="tabpanel" aria-labelledby="admissionLottery-tab">
                 <div id="admissionsTable">
                     <v-table
                             :columns="columns"
@@ -65,6 +67,8 @@
                             row-click-color="#edf7ff"
                     ></v-table>
                 </div>
+            </div>
+            <div class="tab-pane fade" id="waitingLottery" role="tabpanel" aria-labelledby="waitingLottery-tab">
                 <div id="waitingsTable">
                     <v-table
                             :columns="columns"
@@ -107,8 +111,13 @@ var table = new Vue({
                 isLoading: false,
                 tableData: null,
                 columns: [
-                    {field:'id', title:'編號', width:100, titleAlign:'center', columnAlign:'center', isResize:true},
-                    {field:'name', title:'姓名', width:100, titleAlign:'center', columnAlign:'center', isResize:true}
+                    {field: 'custome', title:'流水號', width: 50, titleAlign: 'center', columnAlign: 'center',
+                        formatter: function (rowData,rowIndex,pagingIndex,field) {
+                            return rowIndex + 1
+                        }, isResize:true
+                    },
+                    {field:'id', title:'編號', width:200, titleAlign:'center', columnAlign:'center', isResize:true},
+                    {field:'name', title:'姓名', width:200, titleAlign:'center', columnAlign:'center', isResize:true}
                 ],
                 lotteryNumber : 0,
                 waitingNumber : 0
@@ -117,7 +126,6 @@ var table = new Vue({
 
       methods : {
         sendLottery : function() {
-            console.log("enter")
             axios.post('/api/lottery?timestamp=' + new Date().getTime() + '&lotteryNumber=' + this.lotteryNumber + '&waitingNumber=' + this.waitingNumber, table.tableData)
             .then((result) => { renderLotteryTable(result.data) })
             .catch((err) => { console.error(err) })
@@ -140,8 +148,13 @@ var admissionTable = new Vue({
             return {
                 tableData: null,
                 columns: [
-                    {field:'id', title:'編號', width:100, titleAlign:'center', columnAlign:'center', isResize:true},
-                    {field:'name', title:'姓名', width:100, titleAlign:'center', columnAlign:'center', isResize:true}
+                    {field: 'custome', title:'流水號', width: 100, titleAlign: 'center', columnAlign: 'center',
+                        formatter: function (rowData,rowIndex,pagingIndex,field) {
+                            return rowIndex + 1
+                        }, isFrozen: true, isResize:true
+                    },
+                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isResize:true},
+                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isResize:true}
                 ]
             }
         }
@@ -154,8 +167,13 @@ var waitingTable = new Vue({
                 isLoading: false,
                 tableData: null,
                 columns: [
-                    {field:'id', title:'編號', width:100, titleAlign:'center', columnAlign:'center', isResize:true},
-                    {field:'name', title:'姓名', width:100, titleAlign:'center', columnAlign:'center', isResize:true}
+                    {field: 'custome', title:'流水號', width: 100, titleAlign: 'center', columnAlign: 'center',
+                        formatter: function (rowData,rowIndex,pagingIndex,field) {
+                            return rowIndex + 1
+                        }, isResize:true
+                    },
+                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isResize:true},
+                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isResize:true}
                 ]
             }
         }

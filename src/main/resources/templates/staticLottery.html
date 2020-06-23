@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head"></head>
+<style>
+.div-father{_text-align:center; background-color:#f6f9fc; padding-top: 10px;}
+.div-child{width:600px;margin:0 auto; _text-align:left;}
+</style>
+<body class="div-father">
+<div class="div-child">
+  <div id="app" style="padding-top: 10px;">
+    <div class="input-group mb-3">
+        <input multiple type="file" @change="fileChange" class="form-control" placeholder="選取檔案" aria-label="Recipient's username" aria-describedby="button-addon">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon" @click="upload">上傳檔案</button>
+        </div>
+    </div>
+  </div>
+
+  <div id="excelTable">
+    <v-table
+            is-vertical-resize
+            style="width:100%"
+            is-horizontal-resize
+            :is-loading="isLoading"
+            :vertical-resize-offset='5'
+            :min-height='200'
+            :columns="columns"
+            :table-data="tableData"
+            row-hover-color="#eee"
+            row-click-color="#edf7ff"
+    ></v-table>
+  </div>
+</div>
+</body>
+
+<script>
+var app = new Vue({
+      el: '#app',
+      data: {
+        formData: ''
+      },
+      methods: {
+        fileChange(e) {
+           this.formData = new FormData()
+           this.formData.append('file', e.target.files[0])
+        },
+        upload() {
+          loading()
+          axios.post('/api/upload/static/lottery?timestamp=' + new Date().getTime(), this.formData)
+            .then((result) => { renderTable(result.data) })
+            .catch((err) => { console.error(err) })
+        }
+      }
+})
+
+var table = new Vue({
+      el: '#excelTable',
+      data: function() {
+            return {
+                isLoading: false,
+                tableData: null,
+                columns: [
+                    {field: 'custome', title:'流水號', width: 50, titleAlign: 'center', columnAlign: 'center',
+                        formatter: function (rowData,rowIndex,pagingIndex,field) {
+                            return rowIndex + 1
+                        }, isResize:true
+                    },
+                    {field:'id', title:'編號', width:200, titleAlign:'center', columnAlign:'center', isResize:true},
+                    {field:'name', title:'姓名', width:200, titleAlign:'center', columnAlign:'center', isResize:true}
+                ]
+            }
+        }
+})
+
+function loading() {
+  table.isLoading = true;
+}
+
+function renderTable(resultData) {
+  table.tableData = resultData;
+  table.isLoading = false;
+}
+</script>
+
+</html>

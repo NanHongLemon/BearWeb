@@ -66,8 +66,8 @@ public class LotteryService {
     private void processStaticAdmissionUser(UserLotteryModel outputUser, List<UserExcelModel> user) {
 
         List<UserExcelModel> staticUser = getSessionStaticUser();
-        Iterator<UserExcelModel> it = user.iterator();
         for (UserExcelModel userItem : staticUser) {
+            Iterator<UserExcelModel> it = user.iterator();
             while (it.hasNext()) {
                 UserExcelModel inputItem = it.next();
                 if (userItem.getId().equals(inputItem.getId()) && userItem.getName().equals(inputItem.getName())) {
