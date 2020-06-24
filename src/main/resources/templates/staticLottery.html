@@ -46,7 +46,7 @@ var app = new Vue({
         },
         upload() {
           loading()
-          axios.post('/api/upload/static/lottery?timestamp=' + new Date().getTime(), this.formData)
+          axios.post('/api/excel/static/upload?timestamp=' + new Date().getTime(), this.formData)
             .then((result) => { renderTable(result.data) })
             .catch((err) => { console.error(err) })
         }

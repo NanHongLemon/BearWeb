@@ -28,7 +28,7 @@ public class LotteryService {
         }
 
         UserLotteryModel outputUser = new UserLotteryModel();
-        processStaticAdmissionUser(outputUser, user);
+        processStaticAdmissionUser(outputUser, user, lotteryNumber);
 
         int staticUserNumber = outputUser.getAdmissions().size();
         int admissionSize = lotteryNumber - staticUserNumber;
@@ -63,16 +63,23 @@ public class LotteryService {
         return staticUser;
     }
 
-    private void processStaticAdmissionUser(UserLotteryModel outputUser, List<UserExcelModel> user) {
+    private void processStaticAdmissionUser(UserLotteryModel outputUser, List<UserExcelModel> user, int lotteryNumber) {
 
+        int count = 0;
         List<UserExcelModel> staticUser = getSessionStaticUser();
-        for (UserExcelModel userItem : staticUser) {
+        if (staticUser.isEmpty()) {
+            return;
+        }
+        Collections.shuffle(staticUser);
+        for (int i = 0; i < staticUser.size(); i++) {
+            UserExcelModel userItem = staticUser.get(i);
             Iterator<UserExcelModel> it = user.iterator();
             while (it.hasNext()) {
                 UserExcelModel inputItem = it.next();
-                if (userItem.getId().equals(inputItem.getId()) && userItem.getName().equals(inputItem.getName())) {
+                if (count < lotteryNumber && userItem.getId().equals(inputItem.getId()) && userItem.getName().equals(inputItem.getName())) {
                     outputUser.getAdmissions().add(inputItem);
                     it.remove();
+                    count++;
                 }
             }
         }

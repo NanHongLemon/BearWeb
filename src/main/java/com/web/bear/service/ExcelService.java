@@ -49,7 +49,7 @@ public class ExcelService {
                 String name = formatter.formatCellValue(row.getCell(1));
                 if (!StringUtils.isEmpty(id) && !StringUtils.isEmpty(name)) {
                     userExcelModel.setId(Integer.parseInt(id));
-                    userExcelModel.setName(name);
+                    userExcelModel.setName(markName(name.trim()));
                     list.add(userExcelModel);
                 }
             } else {
@@ -66,5 +66,26 @@ public class ExcelService {
         HttpSession session = request.getSession();
         session.setAttribute("staticUser", list);
         return list;
+    }
+
+    private String markName(String name) {
+
+        if (name == null || name.length() == 0) {
+            return "";
+        }
+        if (name.length() == 2) {
+            return name.replaceFirst(".$", "*");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < name.length(); i++) {
+            if (i == 0 || i == name.length() - 1) {
+                sb.append(name.charAt(i));
+            } else {
+                sb.append("*");
+            }
+        }
+
+        return sb.toString();
     }
 }

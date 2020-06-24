@@ -21,22 +21,4 @@ public class StaticLotteryAction {
 
         return "staticLottery";
     }
-
-    @RequestMapping("/api/upload/static/lottery")
-    @ResponseBody
-    public String uploadStaticLottery(@RequestParam("file") MultipartFile file) {
-
-        String result = "";
-        try {
-            if (excelService.hasExcelFormat(file)) {
-                List<UserExcelModel> listData = excelService.saveStaticExcel(file.getInputStream());
-                result = JsonUtil.objectToJson(listData);
-            } else {
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 }
