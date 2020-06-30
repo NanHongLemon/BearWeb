@@ -101,10 +101,19 @@ public class ExcelService {
 
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
-        Row row = sheet.createRow(1);
-        row.getCell(0).setCellValue("流水號");
-        row.getCell(1).setCellValue("編號");
-        row.getCell(2).setCellValue("姓名");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("流水號");
+        row.createCell(1).setCellValue("編號");
+        row.createCell(2).setCellValue("姓名");
+
+        int rowNum = 1;
+        for (UserExcelModel item : user) {
+            Row rowItem = sheet.createRow(rowNum);
+            rowItem.createCell(0).setCellValue(rowNum);
+            rowItem.createCell(1).setCellValue(item.getId());
+            rowItem.createCell(2).setCellValue(item.getName());
+            rowNum++;
+        }
 
         return wb;
     }

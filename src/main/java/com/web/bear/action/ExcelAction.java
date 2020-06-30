@@ -19,8 +19,6 @@ import java.util.List;
 public class ExcelAction {
 
     @Autowired
-    private HttpServletResponse response;
-    @Autowired
     private ExcelService excelService;
 
     @PostMapping("upload")
@@ -56,8 +54,10 @@ public class ExcelAction {
     }
 
     @RequestMapping("/download")
-    public String downloadResult(@RequestBody String data, @RequestParam("filename") String filename) {
+    @ResponseBody
+    public String downloadResult(@RequestBody String data, HttpServletResponse response) {
 
+        System.out.println(data);
         if (data == null || data.length() <= 0) {
             return "";
         }
@@ -65,7 +65,7 @@ public class ExcelAction {
         try {
             Workbook wb = excelService.getExcelDoc(data);
             response.setContentType(Const.XLSX_TYPE);
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "utf-8"));
+            response.setHeader("Content-Disposition", "attachment;");
             OutputStream outputStream = response.getOutputStream();
             wb.write(outputStream);
             outputStream.flush();

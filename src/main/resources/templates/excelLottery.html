@@ -66,7 +66,8 @@
                             row-hover-color="#eee"
                             row-click-color="#edf7ff"
                     ></v-table>
-                    <button @click="exportExcel">匯出</button>
+                    <br>
+                    <button class="btn btn-primary" @click="exportExcel">匯出</button>
                 </div>
             </div>
             <div class="tab-pane fade" id="waitingLottery" role="tabpanel" aria-labelledby="waitingLottery-tab">
@@ -77,6 +78,8 @@
                             row-hover-color="#eee"
                             row-click-color="#edf7ff"
                     ></v-table>
+                    <br>
+                    <button class="btn btn-primary" @click="exportExcel">匯出</button>
                 </div>
             </div>
         </div>
@@ -112,13 +115,13 @@ var table = new Vue({
                 isLoading: false,
                 tableData: null,
                 columns: [
-                    {field: 'custome', title:'流水號', width: 50, titleAlign: 'center', columnAlign: 'center',
+                    {field: 'custome', title:'流水號', width: 100, titleAlign: 'center', columnAlign: 'center',
                         formatter: function (rowData,rowIndex,pagingIndex,field) {
                             return rowIndex + 1
                         }, isResize:true
                     },
-                    {field:'id', title:'編號', width:200, titleAlign:'center', columnAlign:'center', isResize:true},
-                    {field:'name', title:'姓名', width:200, titleAlign:'center', columnAlign:'center', isResize:true}
+                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isResize:true},
+                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isResize:true}
                 ],
                 lotteryNumber : 0,
                 waitingNumber : 0
@@ -160,10 +163,8 @@ var admissionTable = new Vue({
             }
         },
     methods : {
-      exportExcel : function() {
-        axios.post('api/excel/download?timestamp=' + new Date().getTime() + '&filename=正取', table.tableData)
-            .then((result) => { renderLotteryTable(result.data) })
-            .catch((err) => { console.error(err) })
+      exportExcel() {
+        downloadExcel("正取", admissionTable.tableData);
       }
     }
 })
@@ -184,12 +185,30 @@ var waitingTable = new Vue({
                     {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isResize:true}
                 ]
             }
-        }
+        },
+    methods : {
+      exportExcel() {
+        downloadExcel("備取", waitingTable.tableData);
+      }
+    }
 })
 
 function renderLotteryTable(resultData) {
     admissionTable.tableData = resultData.admissions;
     waitingTable.tableData = resultData.waitings;
+}
+
+function downloadExcel(filename, tableData) {
+  axios.post('api/excel/download?timestamp=' + new Date().getTime(), tableData, { responseType: 'arraybuffer'})
+       .then((response) => {
+         const url = window.URL.createObjectURL(new Blob([response.data]));
+         const link = document.createElement('a');
+         link.href = url;
+         link.setAttribute('download', filename + '.xlsx');
+         document.body.appendChild(link);
+         link.click();
+       })
+       .catch((err) => { console.error(err) })
 }
 </script>
 
