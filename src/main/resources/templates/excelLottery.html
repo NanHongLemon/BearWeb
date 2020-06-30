@@ -66,6 +66,7 @@
                             row-hover-color="#eee"
                             row-click-color="#edf7ff"
                     ></v-table>
+                    <button @click="exportExcel">匯出</button>
                 </div>
             </div>
             <div class="tab-pane fade" id="waitingLottery" role="tabpanel" aria-labelledby="waitingLottery-tab">
@@ -157,7 +158,14 @@ var admissionTable = new Vue({
                     {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isResize:true}
                 ]
             }
-        }
+        },
+    methods : {
+      exportExcel : function() {
+        axios.post('api/excel/download?timestamp=' + new Date().getTime() + '&filename=正取', table.tableData)
+            .then((result) => { renderLotteryTable(result.data) })
+            .catch((err) => { console.error(err) })
+      }
+    }
 })
 
 var waitingTable = new Vue({

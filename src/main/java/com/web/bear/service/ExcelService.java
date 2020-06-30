@@ -1,7 +1,10 @@
 package com.web.bear.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.web.bear.model.UserExcelModel;
 import com.web.bear.model.UserLotteryModel;
+import com.web.bear.util.Const;
+import com.web.bear.util.JsonUtil;
 import org.apache.catalina.User;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,14 +23,12 @@ import java.util.List;
 @Service
 public class ExcelService {
 
-    public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
     @Autowired
     private HttpServletRequest request;
 
     public boolean hasExcelFormat(MultipartFile file) {
 
-        if (!TYPE.equals(file.getContentType())) {
+        if (!Const.XLSX_TYPE.equals(file.getContentType())) {
             return false;
         }
 
@@ -87,5 +88,24 @@ public class ExcelService {
         }
 
         return sb.toString();
+    }
+
+    public Workbook getExcelDoc(String data) {
+
+        List<UserExcelModel> user = JsonUtil.jsonToObject(data, new TypeReference<List<UserExcelModel>>() {
+        });
+
+        if (user.isEmpty()) {
+            return new XSSFWorkbook();
+        }
+
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet();
+        Row row = sheet.createRow(1);
+        row.getCell(0).setCellValue("流水號");
+        row.getCell(1).setCellValue("編號");
+        row.getCell(2).setCellValue("姓名");
+
+        return wb;
     }
 }

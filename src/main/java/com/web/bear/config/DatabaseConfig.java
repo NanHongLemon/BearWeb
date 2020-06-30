@@ -11,11 +11,11 @@ import javax.sql.DataSource;
 //@Configuration
 public class DatabaseConfig {
 
-  //  @Value("${spring.datasource.driverClassName}")
+    //@Value("${spring.datasource.driverClassName}")
     private String driverClassName;
-  //  @Value("${spring.datasource.maxActive}")
+    //@Value("${spring.datasource.maxActive}")
     private int maxActive;
-  //  @Value("${spring.datasource.url}")
+    //@Value("${spring.datasource.url}")
     private String dbUrl;
 
     //@Bean

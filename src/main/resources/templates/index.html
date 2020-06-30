@@ -1,8 +1,22 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="header :: head"></head>
-
+<style>
+  * {
+      margin: 0;
+      padding: 0;
+  }
+  .imgbox {
+      display: grid;
+      height: 100%;
+  }
+  .center-fit {
+      max-width: 100%;
+      max-height: 100vh;
+      margin: auto;
+  }
+</style>
 <body>
-<div th:text=" ${message} + '!'" /></div>
+<a href="/lottery"><img class="center-fit" src="/img/374243.jpg"></a>
 </body>
 </html>
