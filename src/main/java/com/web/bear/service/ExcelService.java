@@ -75,7 +75,7 @@ public class ExcelService {
             return "";
         }
         if (name.length() == 2) {
-            return name.replaceFirst(".$", "*");
+            return name.replaceFirst(".$", "○");
         }
 
         StringBuilder sb = new StringBuilder();
@@ -83,7 +83,7 @@ public class ExcelService {
             if (i == 0 || i == name.length() - 1) {
                 sb.append(name.charAt(i));
             } else {
-                sb.append("*");
+                sb.append("○");
             }
         }
 
