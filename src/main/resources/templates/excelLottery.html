@@ -35,16 +35,11 @@
 
                 <div id="excelTable">
                     <v-table
-                            is-vertical-resize
                             style="width:100%"
-                            is-horizontal-resize
                             :is-loading="isLoading"
-                            :vertical-resize-offset='5'
-                            :min-height='200'
                             :columns="columns"
                             :table-data="tableData"
-                            row-hover-color="#eee"
-                            row-click-color="#edf7ff"
+                            even-bg-color="#f4f4f4"
                     ></v-table>
                     <div class="input-group mb-3" style="padding-top: 10px;">
                         <div class="input-group-prepend">
@@ -66,8 +61,7 @@
                     <v-table
                             :columns="columns"
                             :table-data="tableData"
-                            row-hover-color="#eee"
-                            row-click-color="#edf7ff"
+                            even-bg-color="#f4f4f4"
                     ></v-table>
                     <br>
                     <button class="btn btn-primary" @click="exportExcel">匯出</button>
@@ -78,8 +72,7 @@
                     <v-table
                             :columns="columns"
                             :table-data="tableData"
-                            row-hover-color="#eee"
-                            row-click-color="#edf7ff"
+                            even-bg-color="#f4f4f4"
                     ></v-table>
                     <br>
                     <button class="btn btn-primary" @click="exportExcel">匯出</button>
@@ -150,10 +143,10 @@ var table = new Vue({
                     {field: 'custome', title:'流水號', width: 100, titleAlign: 'center', columnAlign: 'center',
                         formatter: function (rowData,rowIndex,pagingIndex,field) {
                             return rowIndex + 1
-                        }, isResize:true
+                        }, isFrozen:true
                     },
-                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isResize:true},
-                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isResize:true}
+                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isFrozen:true},
+                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isFrozen:true}
                 ],
                 lotteryNumber : 0,
                 waitingNumber : 0
@@ -187,10 +180,10 @@ var admissionTable = new Vue({
                     {field: 'custome', title:'流水號', width: 100, titleAlign: 'center', columnAlign: 'center',
                         formatter: function (rowData,rowIndex,pagingIndex,field) {
                             return rowIndex + 1
-                        }, isFrozen: true, isResize:true
+                        }, isFrozen:true
                     },
-                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isResize:true},
-                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isResize:true}
+                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isFrozen:true},
+                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isFrozen:true}
                 ]
             }
         },
@@ -211,10 +204,10 @@ var waitingTable = new Vue({
                     {field: 'custome', title:'流水號', width: 100, titleAlign: 'center', columnAlign: 'center',
                         formatter: function (rowData,rowIndex,pagingIndex,field) {
                             return rowIndex + 1
-                        }, isResize:true
+                        }, isFrozen:true
                     },
-                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isResize:true},
-                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isResize:true}
+                    {field:'id', title:'編號', width:250, titleAlign:'center', columnAlign:'center', isFrozen:true},
+                    {field:'name', title:'姓名', width:250, titleAlign:'center', columnAlign:'center', isFrozen:true}
                 ]
             }
         },
