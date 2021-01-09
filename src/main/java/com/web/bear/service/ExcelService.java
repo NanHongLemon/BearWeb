@@ -64,8 +64,6 @@ public class ExcelService {
     public List<UserExcelModel> saveStaticExcel(InputStream inputStream) throws IOException {
 
         List<UserExcelModel> list = processExcel(inputStream);
-        HttpSession session = request.getSession();
-        session.setAttribute("staticUser", list);
         return list;
     }
 

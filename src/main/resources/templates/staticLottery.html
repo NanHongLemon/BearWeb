@@ -7,29 +7,51 @@
 </style>
 <body class="div-father">
 <div class="div-child">
-  <div id="app" style="padding-top: 10px;">
-    <div class="input-group mb-3">
-        <input multiple type="file" @change="fileChange" class="form-control" placeholder="選取檔案" aria-label="Recipient's username" aria-describedby="button-addon">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon" @click="upload">上傳檔案</button>
+    <div id="app" style="padding-top: 10px;">
+        <div class="input-group mb-3">
+            <input multiple type="file" @change="fileChange" class="form-control" placeholder="選取檔案"
+                   aria-label="Recipient's username" aria-describedby="button-addon">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon" @click="upload">上傳檔案</button>
+            </div>
         </div>
     </div>
-  </div>
 
-  <div id="excelTable">
-    <v-table
-            is-vertical-resize
-            style="width:100%"
-            is-horizontal-resize
-            :is-loading="isLoading"
-            :vertical-resize-offset='5'
-            :min-height='200'
-            :columns="columns"
-            :table-data="tableData"
-            row-hover-color="#eee"
-            row-click-color="#edf7ff"
-    ></v-table>
-  </div>
+    <div id="excelTable">
+        <v-table
+                is-vertical-resize
+                style="width:100%"
+                is-horizontal-resize
+                :is-loading="isLoading"
+                :vertical-resize-offset='5'
+                :min-height='200'
+                :columns="columns"
+                :table-data="tableData"
+                row-hover-color="#eee"
+                row-click-color="#edf7ff"
+        ></v-table>
+        <br>
+        <input type="button" class="btn btn-primary" value="儲存" @click="saveLottery"/>
+        <input type="button" class="btn btn-warning" value="清除" @click="deleteLottery"/>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">提示訊息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="modalContent" class="modal-body">已儲存成功</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 
@@ -69,6 +91,24 @@ var table = new Vue({
                     {field:'name', title:'姓名', width:200, titleAlign:'center', columnAlign:'center', isResize:true}
                 ]
             }
+        },
+        methods: {
+            saveLottery() {
+                axios.post('/api/save/static/lottery?timestamp=' + new Date().getTime(), table.tableData)
+                .then((result) => {
+                  $("#modalContent").html("已儲存成功");
+                  $("#exampleModal").modal("show");
+                })
+                .catch((err) => { console.error(err) })
+            },
+            deleteLottery() {
+                axios.delete('/api/static/lottery?timestamp=' + new Date().getTime())
+                .then((result) => {
+                  $("#modalContent").html("已清除成功");
+                  $("#exampleModal").modal("show");
+                })
+                .catch((err) => { console.error(err) })
+            }
         }
 })
 
@@ -80,6 +120,7 @@ function renderTable(resultData) {
   table.tableData = resultData;
   table.isLoading = false;
 }
+
 </script>
 
 </html>

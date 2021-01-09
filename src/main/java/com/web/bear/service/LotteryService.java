@@ -84,4 +84,12 @@ public class LotteryService {
             }
         }
     }
+
+    public void saveStaticLottery(String data) {
+
+        List<UserExcelModel> list = JsonUtil.jsonToObject(data, new TypeReference<List<UserExcelModel>>() {
+        });
+        HttpSession session = request.getSession();
+        session.setAttribute("staticUser", list);
+    }
 }
