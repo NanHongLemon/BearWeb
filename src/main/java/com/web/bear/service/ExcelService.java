@@ -88,10 +88,7 @@ public class ExcelService {
         return sb.toString();
     }
 
-    public Workbook getExcelDoc(String data) {
-
-        List<UserExcelModel> user = JsonUtil.jsonToObject(data, new TypeReference<List<UserExcelModel>>() {
-        });
+    public Workbook getExcelDoc(List<UserExcelModel> user) {
 
         if (user.isEmpty()) {
             return new XSSFWorkbook();

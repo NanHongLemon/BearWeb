@@ -4,25 +4,31 @@ import com.web.bear.model.UserExcelModel;
 import com.web.bear.service.ExcelService;
 import com.web.bear.util.Const;
 import com.web.bear.util.JsonUtil;
+import io.swagger.annotations.*;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/excel")
+@Api(tags = "Excel")
 public class ExcelAction {
 
     @Autowired
     private ExcelService excelService;
+    @Autowired
+    private HttpServletResponse response;
 
-    @PostMapping("upload")
-    public String upload(@RequestParam("file") MultipartFile file) {
+    @ApiOperation(value = "抽獎名單上傳Excel檔案")
+    @PostMapping(value = "upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String upload(@ApiParam(name = "file", value = "抽獎Excel檔", required = true) @RequestPart("file") MultipartFile file) {
 
         String result = "";
         try {
@@ -36,16 +42,16 @@ public class ExcelAction {
         return result;
     }
 
-    @RequestMapping("/static/upload")
-    public String uploadStaticLottery(@RequestParam("file") MultipartFile file) {
+    @ApiOperation("固定名單Excel上傳")
+    @PostMapping(value = "/static/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String uploadStaticLottery(@ApiParam(name = "file", value = "固定名單Excel檔", required = true) @RequestPart("file") MultipartFile file) {
 
         String result = "";
         try {
             if (excelService.hasExcelFormat(file)) {
                 List<UserExcelModel> listData = excelService.saveStaticExcel(file.getInputStream());
                 result = JsonUtil.objectToJson(listData);
-            } else {
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,12 +59,12 @@ public class ExcelAction {
         return result;
     }
 
-    @RequestMapping("/download")
+    @ApiOperation("抽獎名單Excel下載")
+    @PostMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String downloadResult(@RequestBody String data, HttpServletResponse response) {
+    public String downloadResult(@ApiParam(name = "data", required = true) @RequestBody List<UserExcelModel> data) {
 
-        System.out.println(data);
-        if (data == null || data.length() <= 0) {
+        if (data == null || data.size() <= 0) {
             return "";
         }
 

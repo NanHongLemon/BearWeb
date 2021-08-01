@@ -1,10 +1,14 @@
 package com.web.bear.model;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(description = "Excel名單資料")
 public class UserExcelModel {
 
+    @ApiModelProperty(value = "流水號", dataType = "Integer", example = "0", required = true)
     private Integer id;
+    @ApiModelProperty(value = "姓名", dataType = "String", example = "陳聰明", required = true)
     private String name;
 
     public Integer getId() {

@@ -1,6 +1,5 @@
 package com.web.bear.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.web.bear.model.UserExcelModel;
 import com.web.bear.model.UserLotteryModel;
 import com.web.bear.util.JsonUtil;
@@ -17,17 +16,15 @@ public class LotteryService {
     @Autowired
     private HttpServletRequest request;
 
-    public String processLotteryUser(String data, int lotteryNumber, int waitingNumber) {
-
-        List<UserExcelModel> user = JsonUtil.jsonToObject(data, new TypeReference<List<UserExcelModel>>() {
-        });
+    public UserLotteryModel processLotteryUser(List<UserExcelModel> user, int lotteryNumber, int waitingNumber) {
 
         Collections.shuffle(user);
+        UserLotteryModel outputUser = new UserLotteryModel();
         if (lotteryNumber > user.size()) {
-            return JsonUtil.objectToJson(user);
+            outputUser.setAdmissions(user);
+            return outputUser;
         }
 
-        UserLotteryModel outputUser = new UserLotteryModel();
         processStaticAdmissionUser(outputUser, user, lotteryNumber);
 
         int staticUserNumber = outputUser.getAdmissions().size();
@@ -45,7 +42,7 @@ public class LotteryService {
             }
         }
 
-        return JsonUtil.objectToJson(outputUser);
+        return outputUser;
     }
 
     private List<UserExcelModel> getSessionStaticUser() {
@@ -85,11 +82,9 @@ public class LotteryService {
         }
     }
 
-    public void saveStaticLottery(String data) {
+    public void saveStaticLottery(List<UserExcelModel> user) {
 
-        List<UserExcelModel> list = JsonUtil.jsonToObject(data, new TypeReference<List<UserExcelModel>>() {
-        });
         HttpSession session = request.getSession();
-        session.setAttribute("staticUser", list);
+        session.setAttribute("staticUser", user);
     }
 }
